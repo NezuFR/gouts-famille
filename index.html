@@ -33,7 +33,7 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 .tag{display:inline-block;font-size:12.5px;padding:3px 9px;border-radius:9px;background:rgba(255,157,92,.13);color:var(--terra);margin-right:4px}
 .tag.b{background:rgba(92,184,255,.13);color:var(--blue)}
 .nav{position:fixed;left:0;right:0;bottom:0;background:rgba(20,21,24,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 6px calc(env(safe-area-inset-bottom) + 8px);z-index:10}
-.nav button{background:none;border:0;color:var(--muted);font:inherit;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;border-radius:12px;cursor:pointer;min-width:58px}
+.nav button{background:none;border:0;color:var(--muted);font:inherit;font-size:10.5px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px;border-radius:12px;cursor:pointer;flex:1;min-width:0}
 .nav button span{font-size:22px;line-height:1}.nav button.on{color:var(--lime)}
 .meal{display:flex;gap:14px;align-items:center;cursor:pointer}
 .meal .em{width:52px;height:52px;border-radius:50%;background:var(--card2);display:grid;place-items:center;font-size:25px;flex-shrink:0}
@@ -62,7 +62,7 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
 <div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
-const PAGE_V="2026-11-17-3";
+const PAGE_V="2026-11-17-4";
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
 const ALIMENTS = {
@@ -130,7 +130,7 @@ function pick(id,first){me=fam.find(m=>m.member_id===id);tastes=Object.assign({}
 function go(t){tab=t;refresh();window.scrollTo(0,0)}
 function refresh(){if(!me)return;nav();(V[tab]||V.gouts)()}
 function nav(){if(!access()){$("#navRoot").innerHTML="";return}
-  const T=[["today","🍽️","Aujourd'hui"],["week","🗓️","Semaine"],["shop","🛒","Courses"],["maison","🧺","Maison"],["gouts","😋","Goûts"]];
+  const T=[["today","🍽️","Repas"],["week","🗓️","Semaine"],["shop","🛒","Courses"],["prix","🧾","Prix"],["maison","🧺","Maison"],["gouts","😋","Goûts"]];
   $("#navRoot").innerHTML=`<div class="nav">${T.map(([k,e,l])=>`<button class="${tab===k?"on":""}" onclick="go('${k}')"><span>${e}</span>${l}</button>`).join("")}</div>`}
 function setStatus(s){status=s;const el=$("#st");if(el){el.className="pill "+(s==="ok"?"ok":"");el.textContent=s==="saving"?"Enregistrement…":s==="ok"?"✓ Enregistré":"⚠︎ Hors ligne"}}
 const stPill=()=>`<span class="pill ${status==="ok"?"ok":""}" id="st">${status==="saving"?"Enregistrement…":status==="ok"?"✓ Enregistré":status==="err"?"⚠︎ Hors ligne":"✓ À jour"}</span>`;
@@ -179,7 +179,7 @@ V.shop=()=>{if(!snap){$("#app").innerHTML=noSnap();return}
     <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:18px"><span>Total</span><b style="color:${B&&tot>B+0.5?"var(--terra)":"var(--lime)"}">≈ ${eur(tot)}</b></div>
     ${B?`<div class="bar"><div style="width:${Math.min(100,tot/B*100)}%;${tot>B+0.5?"background:var(--terra)":""}"></div></div><div class="muted small" style="margin-top:4px">Budget : ${eur(B)}${tot>B+0.5?" · au-dessus : reporte des achats maison avec ⏭":""}</div>`:""}
     <div class="muted small" style="margin-top:6px">${left} article${left>1?"s":""} restant${left>1?"s":""}</div></div>
-   ${w.stores.map(s=>`<div class="card"><h3>🛒 ${esc(s.st)}</h3>${s.cats.map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(i=>`<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t">${esc(i.l)}${i.q?` <b style="color:var(--lime)">${esc(i.q)}</b>`:""}${i.pk?`<div class="muted small">${esc(i.pk)}</div>`:""}${i.solo&&!i.q?`<div class="muted small">pour ${esc(snap.me)}</div>`:""}</div></div>`).join("")}`).join("")}
+   ${w.stores.map(s=>`<div class="card"><h3>🛒 ${esc(s.st)}</h3>${s.cats.map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(i=>`<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t" style="flex:1">${esc(i.l)}${i.q?` <b style="color:var(--lime)">${esc(i.q)}</b>`:""}${i.pk?`<div class="muted small">${esc(i.pk)}</div>`:""}${i.solo&&!i.q?`<div class="muted small">pour ${esc(snap.me)}</div>`:""}</div>${i.ik&&snap.prices&&snap.prices[i.ik]?`<button class="btn" style="padding:4px 9px;font-size:13px;${realU(i.ik)!=null?"color:var(--lime)":""}" onclick="event.stopPropagation();editPrix('${i.ik}')">€</button>`:""}</div>`).join("")}`).join("")}
      ${s.ex.length?`<div class="cat">Placard (vérifier)</div>${s.ex.map(i=>`<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t">${esc(i.l)}</div></div>`).join("")}`:""}</div>`).join("")}
    ${due.length?`<div class="card"><h3>🧺 Maison, soins & animaux</h3>${Object.entries(rc).map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(it=>{const k=w.mon+"|rec"+it.id;return `<div style="display:flex;align-items:center;gap:6px"><div class="chk ${ck(k)?"on":""}" style="flex:1" onclick="toggle('${k}')"><div class="box">${ck(k)?"✓":""}</div><div class="t">${esc(it.n)}${it.q?` <b style="color:var(--lime)">${esc(it.q)}</b>`:""} <span class="muted small">≈ ${eur(price(it))}</span></div></div><button class="btn" style="padding:6px 9px" title="Reporter à la semaine prochaine" onclick="skip('${w.mon}','${it.id}')">⏭</button></div>`}).join("")}`).join("")}
     <p class="muted small" style="margin:8px 0 0">⏭ = reporter l'achat à la semaine prochaine</p></div>`:""}`};
@@ -200,6 +200,35 @@ V.maison=()=>{const rec=recItems(),avg=rec.filter(i=>i.on).reduce((a,it)=>a+pric
 function rset(id,k,v){const it=Object.assign({},kvGet("rec:"+id));it[k]=v;kvSet("rec:"+id,it);if(k!=="n"&&k!=="q")keep(refresh)}
 function rdel(id){kvSet("rec:"+id,null);keep(refresh)}
 function radd(ci){const el=$("#add"+ci),n=el.value.trim();if(!n)return;const it={id:"r"+Date.now(),cat:REC_CATS[ci],n,q:"",p:0,f:4,on:true,o:0};kvSet("rec:"+it.id,it);keep(refresh)}
+
+
+/* ---------- Prix réels ---------- */
+let pxq="";
+function pinfo(k){const a=snap&&snap.prices&&snap.prices[k];return a?{est:a[0],type:a[1],label:a[2],def:a[3]}:null}
+function realU(k){const v=kvGet("prix:"+k),pi=pinfo(k);if(!v||!pi||!(+v.p>0)||!(+v.n>0))return null;
+  if(pi.type==="mass"||pi.type==="vol"){const b=(v.u==="kg"||v.u==="L")?v.n*1000:v.n;return v.p/b*1000}return v.p/v.n}
+function fmtU(k,v){const pi=pinfo(k);return pi.type==="mass"?eur(v)+"/kg":pi.type==="vol"?eur(v)+"/L":eur(v)+" / "+pi.label}
+function lab(k){for(const l of Object.values(ALIMENTS))for(const [kk,ll] of l)if(kk===k)return ll;return k}
+V.prix=()=>{if(!snap||!snap.prices){$("#app").innerHTML=noSnap();return}
+  const q=pxq.toLowerCase(),keys=Object.keys(snap.prices),nReal=keys.filter(k=>realU(k)!=null).length;
+  $("#app").innerHTML=`<div class="top"><b>🧾 Prix du ticket</b>${stPill()}</div>
+   <div class="hero"><h1>${nReal} / ${keys.length} prix réels</h1><p>Touche un produit et recopie le ticket : le prix payé et la quantité du paquet. Les recettes et le budget se recalculent.</p></div>
+   <input class="in" style="width:100%;margin-bottom:12px" placeholder="Chercher un produit…" value="${esc(pxq)}" oninput="pxq=this.value;const p=this.selectionStart;refresh();const e=document.querySelector('.wrap input.in');e.focus();e.setSelectionRange(p,p)">
+   ${Object.entries(ALIMENTS).map(([c,l])=>{const rows=l.filter(([k,ll])=>snap.prices[k]&&(!q||ll.toLowerCase().includes(q)));if(!rows.length)return "";
+    return `<div class="card"><h3 style="margin-bottom:4px">${c}</h3>${rows.map(([k,ll])=>{const r=realU(k),pi=pinfo(k);return `<div class="row" style="cursor:pointer" onclick="editPrix('${k}')"><span>${r!=null?"✅ ":""}${esc(ll)}</span><span class="${r!=null?"":"muted"}" style="font-size:14px">${r!=null?fmtU(k,r):pi.est!=null?"≈ "+fmtU(k,pi.est):"—"} ›</span></div>`}).join("")}</div>`}).join("")}`};
+function editPrix(k){const pi=pinfo(k),v=kvGet("prix:"+k)||{},units=pi.type==="mass"?["g","kg"]:pi.type==="vol"?["ml","L"]:[pi.label];
+  $("#sheetRoot").innerHTML=`<div class="sheet" onclick="if(event.target===this)this.remove()"><div>
+   <h2 style="margin:0 0 4px">${esc(lab(k))}</h2><p class="muted small" style="margin:0 0 14px">${realU(k)!=null?"Prix réel actuel : "+fmtU(k,realU(k))+(v.at?" (relevé le "+fmtShort(v.at)+")":""):pi.est!=null?"Estimation actuelle : ≈ "+fmtU(k,pi.est):""}</p>
+   <label class="muted small">Prix payé (sur le ticket)</label>
+   <div style="display:flex;gap:8px;align-items:center;margin:4px 0 12px"><input id="pxp" class="in" type="number" inputmode="decimal" step="0.01" value="${v.p??""}" placeholder="0,00" style="flex:1;min-width:0;font-size:20px"><b>€</b></div>
+   <label class="muted small">Pour quelle quantité ?</label>
+   <div style="display:flex;gap:8px;margin:4px 0 16px"><input id="pxn" class="in" type="number" inputmode="decimal" step="any" value="${v.n??pi.def}" style="flex:1;min-width:0;font-size:18px"><select id="pxu" class="in" style="max-width:45%">${units.map(u=>`<option ${(v.u||units[0])===u?"selected":""}>${esc(u)}</option>`).join("")}</select></div>
+   <button class="btn pri" style="width:100%;padding:14px;font-size:16px" onclick="savePrix('${k}')">Enregistrer</button>
+   <div style="display:flex;gap:8px;margin-top:10px">${realU(k)!=null?`<button class="btn" style="flex:1" onclick="kvSet('prix:${k}',null);$('#sheetRoot').innerHTML='';toast('Retour à l\\'estimation');keep(refresh)">Effacer</button>`:""}<button class="btn" style="flex:1" onclick="$('#sheetRoot').innerHTML=''">Annuler</button></div></div></div>`;
+  setTimeout(()=>$("#pxp").focus(),100)}
+function savePrix(k){const p=parseFloat(String($("#pxp").value).replace(",",".")),n=parseFloat(String($("#pxn").value).replace(",","."));
+  if(!(p>0)||!(n>0)){toast("Entre le prix et la quantité");return}
+  kvSet("prix:"+k,{p,n,u:$("#pxu").value,at:todayS()});$("#sheetRoot").innerHTML="";toast(lab(k)+" : "+fmtU(k,realU(k))+" ✓");keep(refresh)}
 
 /* ---------- Goûts ---------- */
 V.gouts=()=>{const n=Object.keys(tastes).length;
