@@ -62,7 +62,7 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
 <div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
-const PAGE_V="2026-11-17-4";
+const PAGE_V="2026-11-17-5";
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
 const ALIMENTS = {
@@ -225,7 +225,7 @@ function editPrix(k){const pi=pinfo(k),v=kvGet("prix:"+k)||{},units=pi.type==="m
    <div style="display:flex;gap:8px;margin:4px 0 16px"><input id="pxn" class="in" type="number" inputmode="decimal" step="any" value="${v.n??pi.def}" style="flex:1;min-width:0;font-size:18px"><select id="pxu" class="in" style="max-width:45%">${units.map(u=>`<option ${(v.u||units[0])===u?"selected":""}>${esc(u)}</option>`).join("")}</select></div>
    <button class="btn pri" style="width:100%;padding:14px;font-size:16px" onclick="savePrix('${k}')">Enregistrer</button>
    <div style="display:flex;gap:8px;margin-top:10px">${realU(k)!=null?`<button class="btn" style="flex:1" onclick="kvSet('prix:${k}',null);$('#sheetRoot').innerHTML='';toast('Retour à l\\'estimation');keep(refresh)">Effacer</button>`:""}<button class="btn" style="flex:1" onclick="$('#sheetRoot').innerHTML=''">Annuler</button></div></div></div>`;
-  setTimeout(()=>$("#pxp").focus(),100)}
+  setTimeout(()=>{const e=$("#pxp");if(e)e.focus()},100)}
 function savePrix(k){const p=parseFloat(String($("#pxp").value).replace(",",".")),n=parseFloat(String($("#pxn").value).replace(",","."));
   if(!(p>0)||!(n>0)){toast("Entre le prix et la quantité");return}
   kvSet("prix:"+k,{p,n,u:$("#pxu").value,at:todayS()});$("#sheetRoot").innerHTML="";toast(lab(k)+" : "+fmtU(k,realU(k))+" ✓");keep(refresh)}
