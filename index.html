@@ -55,7 +55,7 @@ const ALIMENTS = {
  "Sauces & saveurs":[["sauce_tomate","Sauce tomate"],["pesto","Pesto"],["curry","Curry / épices douces"],["lait_coco","Lait de coco"],["sauce_soja","Sauce soja"],["cannelle","Cannelle"]]
 };
 const TOTAL=Object.values(ALIMENTS).flat().length;
-const code=(location.hash||"").slice(1).replace(/[^a-zA-Z0-9]/g,"");
+const [code,want]=(location.hash||"").slice(1).split(".").map(x=>(x||"").replace(/[^a-zA-Z0-9]/g,""));
 let fam=[],me=null,tastes={},timer=null,status="";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -67,7 +67,7 @@ async function start(){
   if(code.length<24){$("#app").innerHTML=`<div class="hero"><h1>Lien incomplet</h1><p>Demande à nouveau le lien complet : il doit se terminer par un long code après le « # ».</p></div>`;return}
   try{fam=await rpc("get_family",{p_code:code})}catch(e){$("#app").innerHTML=`<div class="card">Impossible de se connecter. Vérifie ta connexion internet et recharge la page.</div>`;return}
   fam=(fam||[]).filter(m=>m.member_id!=="moi");
-  const saved=ls("gf_me_"+code);
+  const saved=(want&&fam.find(m=>m.member_id===want))?want:ls("gf_me_"+code);
   if(saved&&fam.find(m=>m.member_id===saved))pick(saved);else whoView();
 }
 function whoView(){
