@@ -4,45 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d0e10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Famille">
 <meta name="robots" content="noindex">
-<title>Nos goûts 🍽️</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>😋</text></svg>">
+<title>Famille 🍽️</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23c6f36d'/><text x='50' y='68' font-size='56' text-anchor='middle'>🍽️</text></svg>">
 <style>
-:root{--bg:#0d0e10;--card:#1a1c20;--card2:#24262b;--ink:#f1f2ee;--muted:#8e939b;--line:#26292e;--lime:#c6f36d;--terra:#ff9d5c}
+:root{--bg:#0d0e10;--card:#1a1c20;--card2:#24262b;--ink:#f1f2ee;--muted:#8e939b;--line:#26292e;--lime:#c6f36d;--terra:#ff9d5c;--blue:#5cb8ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-.wrap{max-width:640px;margin:0 auto;padding:18px 16px 90px}
-.hero{background:linear-gradient(135deg,#c6f36d,#a6e04a);color:#15200a;border-radius:24px;padding:22px;margin-bottom:16px}
-.hero h1{margin:0 0 6px;font-size:24px;letter-spacing:-.4px}.hero p{margin:0;opacity:.8;font-size:15px}
-.card{background:var(--card);border-radius:22px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(255,255,255,.04)}
-.who{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.who button{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:18px 10px;font:inherit;font-size:17px;font-weight:600;cursor:pointer}
-.who button small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-top:3px}
-.top{position:sticky;top:0;z-index:5;background:rgba(13,14,16,.92);backdrop-filter:blur(10px);padding:12px 16px;margin:0 -16px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
-.top b{flex:1}
+html,body{background:var(--bg)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);font-size:16px;line-height:1.45}
+.wrap{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 96px)}
+.hero{background:linear-gradient(135deg,#c6f36d,#a6e04a);color:#15200a;border-radius:24px;padding:20px;margin-bottom:14px}
+.hero h1{margin:0 0 4px;font-size:23px;letter-spacing:-.4px}.hero p{margin:0;opacity:.8;font-size:14.5px}
+.card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:12px;border:1px solid rgba(255,255,255,.04)}
+h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size:17px}
+.muted{color:var(--muted)}.small{font-size:13px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);gap:10px}
+.row:last-child{border:0}.row>span:last-child{white-space:nowrap}
+.btn{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 13px;font:inherit;font-size:14.5px;cursor:pointer}
+.btn.pri{background:var(--lime);color:#15200a;border-color:var(--lime);font-weight:650}
+.in{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 11px;font:inherit;font-size:15px}
 .pill{font-size:12.5px;padding:4px 10px;border-radius:20px;background:var(--card2);color:var(--muted);white-space:nowrap}
 .pill.ok{background:rgba(198,243,109,.15);color:var(--lime)}
-.bar{height:8px;background:var(--card2);border-radius:8px;overflow:hidden;margin-top:6px}.bar div{height:100%;background:var(--lime);transition:width .3s}
-h3{margin:0;font-size:17px}
-.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px}
-.ch .all{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
-.ch .all button{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:4px 8px;font-size:15px;cursor:pointer}
-.row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);gap:10px}
-.row:last-child{border:0}
-.row>span:last-child{white-space:nowrap}
-.b{display:flex;gap:6px;flex-shrink:0}
-.b button{width:46px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card2);font-size:19px;cursor:pointer;opacity:.6;transition:.12s}
-.b button.on{opacity:1}.b button.on.l{background:var(--terra);border-color:var(--terra)}.b button.on.o{background:var(--lime);border-color:var(--lime)}.b button.on.n{background:#4a505c;border-color:#4a505c}
-.btn{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
-.muted{color:var(--muted)}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2a2f38;color:var(--ink);padding:11px 18px;border-radius:14px;font-size:14px;border:1px solid #3a404b;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-.in{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 11px;font:inherit;font-size:15px}
-.done{background:var(--lime);color:#15200a;border:0;border-radius:16px;padding:15px;width:100%;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
+.tag{display:inline-block;font-size:12.5px;padding:3px 9px;border-radius:9px;background:rgba(255,157,92,.13);color:var(--terra);margin-right:4px}
+.tag.b{background:rgba(92,184,255,.13);color:var(--blue)}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(20,21,24,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 6px calc(env(safe-area-inset-bottom) + 8px);z-index:10}
+.nav button{background:none;border:0;color:var(--muted);font:inherit;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;border-radius:12px;cursor:pointer;min-width:58px}
+.nav button span{font-size:22px;line-height:1}.nav button.on{color:var(--lime)}
+.meal{display:flex;gap:14px;align-items:center;cursor:pointer}
+.meal .em{width:52px;height:52px;border-radius:50%;background:var(--card2);display:grid;place-items:center;font-size:25px;flex-shrink:0}
+.meal h3{margin:2px 0 6px;font-size:17px}
+.daynav{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.daynav b{flex:1;text-align:center;font-size:17px}
+.circle{width:42px;height:42px;border-radius:50%;background:var(--card2);border:1px solid var(--line);color:var(--ink);font-size:18px;cursor:pointer}
+.circle:disabled{opacity:.3}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.chk:last-child{border:0}
+.box{width:24px;height:24px;border-radius:8px;border:2px solid #4a505c;flex-shrink:0;display:grid;place-items:center;font-size:15px;color:#15200a;margin-top:1px}
+.chk.on .box{background:var(--lime);border-color:var(--lime)}.chk.on .t{opacity:.45;text-decoration:line-through}
+.cat{font-size:13px;color:var(--terra);font-weight:650;margin:12px 0 2px}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:flex;align-items:flex-end}
+.sheet>div{background:var(--card);width:100%;max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(env(safe-area-inset-bottom) + 20px)}
+.sheet ol{padding-left:20px}.sheet li{margin-bottom:8px}
+.b3{display:flex;gap:6px;flex-shrink:0}
+.b3 button{width:46px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card2);font-size:19px;cursor:pointer;opacity:.6}
+.b3 button.on{opacity:1}.b3 button.on.l{background:var(--terra);border-color:var(--terra)}.b3 button.on.o{background:var(--lime);border-color:var(--lime)}.b3 button.on.n{background:#4a505c;border-color:#4a505c}
+.bar{height:8px;background:var(--card2);border-radius:8px;overflow:hidden;margin-top:8px}.bar div{height:100%;background:var(--lime)}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#2a2f38;color:var(--ink);padding:11px 18px;border-radius:14px;font-size:14px;border:1px solid #3a404b;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.top{display:flex;align-items:center;gap:10px;margin:0 2px 12px}.top b{flex:1;font-size:15px}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
+<div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
@@ -57,90 +74,142 @@ const ALIMENTS = {
  "Sauces & saveurs":[["sauce_tomate","Sauce tomate"],["pesto","Pesto"],["curry","Curry / épices douces"],["lait_coco","Lait de coco"],["sauce_soja","Sauce soja"],["cannelle","Cannelle"]]
 };
 const TOTAL=Object.values(ALIMENTS).flat().length;
-const [code,want,mode]=(location.hash||"").slice(1).split(".").map(x=>(x||"").replace(/[^a-zA-Z0-9]/g,""));
-let fam=[],me=null,tastes={},timer=null,status="";
-const $=s=>document.querySelector(s);
-const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-async function rpc(fn,body){const r=await fetch(API+fn,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok)throw new Error(await r.text());const t=await r.text();return t?JSON.parse(t):null}
-function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
-function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}}
-
-async function start(){
-  if(code.length<24){$("#app").innerHTML=`<div class="hero"><h1>Lien incomplet</h1><p>Demande à nouveau le lien complet : il doit se terminer par un long code après le « # ».</p></div>`;return}
-  try{fam=await rpc("get_family",{p_code:code})}catch(e){$("#app").innerHTML=`<div class="card">Impossible de se connecter. Vérifie ta connexion internet et recharge la page.</div>`;return}
-  fam=(fam||[]).filter(m=>m.member_id!=="moi");
-  if(mode==="maison"){me=fam.find(m=>m.member_id===want)||null;return maisonStart()}
-  const saved=(want&&fam.find(m=>m.member_id===want))?want:ls("gf_me_"+code);
-  if(saved&&fam.find(m=>m.member_id===saved))pick(saved);else whoView();
-}
-function whoView(){
-  $("#app").innerHTML=`<div class="hero"><h1>Salut 👋</h1><p>On prépare les repas de la famille. Dis-nous ce que tu aimes, comme ça il n'y aura que des plats qui te plaisent !</p></div>
-  <div class="card"><h3 style="margin-bottom:12px">Qui es-tu ?</h3>
-  ${fam.length?`<div class="who">${fam.map(m=>`<button onclick="pick('${esc(m.member_id)}')">${esc(m.member_name)}<small>${Object.keys(m.tastes||{}).length}/${TOTAL} aliments</small></button>`).join("")}</div>`:`<p class="muted">Personne n'est encore inscrit. Demande d'ouvrir l'app « Ma reconstruction » une fois avec internet, puis recharge cette page.</p>`}</div>`;
-}
-function pick(id){me=fam.find(m=>m.member_id===id);tastes=Object.assign({},me.tastes||{});ls("gf_me_"+code,id);view();window.scrollTo(0,0)}
-function view(){
-  const n=Object.keys(tastes).length;
-  $("#app").innerHTML=`<div class="top"><b>😋 ${esc(me.member_name)}</b><span class="pill ${status==="ok"?"ok":""}" id="st">${status==="saving"?"Enregistrement…":status==="ok"?"✓ Enregistré":status==="err"?"⚠︎ Pas enregistré":"Prêt"}</span><button class="btn" onclick="me=null;whoView()">Changer</button></div>
-  <div class="card"><div style="display:flex;justify-content:space-between"><span><b>${n}</b> / ${TOTAL} aliments</span><span class="muted">${n===TOTAL?"Complet 🎉":""}</span></div><div class="bar"><div style="width:${n/TOTAL*100}%"></div></div>
-   <div class="legend" style="margin-top:12px"><span>😋 j'adore</span><span>🙂 ça va</span><span>✖ je n'en veux pas</span></div>
-   <p class="muted" style="font-size:13.5px;margin:10px 0 0">Tout s'enregistre automatiquement. Un ✖ enlève les plats qui contiennent cet aliment : n'en mets que sur ce que tu ne veux vraiment pas manger.</p></div>
-  ${Object.entries(ALIMENTS).map(([c,l],ci)=>`<div class="card"><div class="ch"><h3>${c}</h3><span class="all">Tout :<button onclick="all(${ci},'l')">😋</button><button onclick="all(${ci},'o')">🙂</button></span></div>
-   ${l.map(([k,lab])=>`<div class="row"><span>${esc(lab)}</span><span class="b">
-    <button class="${tastes[k]==="l"?"on l":""}" onclick="set('${k}','l')" aria-label="J'adore">😋</button>
-    <button class="${tastes[k]==="o"?"on o":""}" onclick="set('${k}','o')" aria-label="Ça va">🙂</button>
-    <button class="${tastes[k]==="n"?"on n":""}" onclick="set('${k}','n')" aria-label="Je n'en veux pas">✖</button></span></div>`).join("")}</div>`).join("")}
-  <button class="done" onclick="saveNow(true)">C'est bon, j'ai fini ✓</button>`;
-}
-function rerender(){const y=window.scrollY;view();window.scrollTo(0,y)}
-function set(k,v){if(tastes[k]===v)delete tastes[k];else tastes[k]=v;queue();rerender()}
-function all(ci,v){Object.values(ALIMENTS)[ci].forEach(([k])=>{if(!tastes[k])tastes[k]=v});queue();rerender()}
-function setStatus(s){status=s;const el=$("#st");if(el){el.className="pill "+(s==="ok"?"ok":"");el.textContent=s==="saving"?"Enregistrement…":s==="ok"?"✓ Enregistré":"⚠︎ Pas enregistré"}}
-function queue(){setStatus("saving");clearTimeout(timer);timer=setTimeout(()=>saveNow(false),700)}
-async function saveNow(final){clearTimeout(timer);setStatus("saving");
-  try{await rpc("save_tastes",{p_code:code,p_member:me.member_id,p_name:me.member_name,p_tastes:tastes});me.tastes=Object.assign({},tastes);setStatus("ok");if(final)toast("Merci ! Tes goûts sont enregistrés 💛")}
-  catch(e){setStatus("err");toast("Pas de connexion : réessaie dans un instant")}}
-window.addEventListener("beforeunload",e=>{if(status==="saving"){saveNow(false)}});
-
-/* ---------- Liste Maison, soins & animaux ---------- */
 const REC_CATS=["🥖 Petits-déj & goûters de la famille","🧺 Ménage","🧴 Hygiène & soins","💄 Maquillage","🐶 Chien","🐱 Chat"];
 const FREQ=[[1,"chaque semaine"],[2,"toutes les 2 semaines"],[4,"chaque mois"],[8,"tous les 2 mois"],[12,"tous les 3 mois"]];
 const EPOCH="2026-11-16";
-let rec=[],recT=null;
-function isoD(d){const x=new Date(d);x.setMinutes(x.getMinutes()-x.getTimezoneOffset());return x.toISOString().slice(0,10)}
-function monday(){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return isoD(d)}
-function wIdx(mon){return Math.round((new Date(mon+"T12:00:00")-new Date(EPOCH+"T12:00:00"))/(7*864e5))}
-function due(mon){const w=wIdx(mon);return rec.filter(it=>it.on&&((w%it.f)+it.f)%it.f===((+it.o||0)%it.f))}
+const [code,want,mode]=(location.hash||"").slice(1).split(".").map(x=>(x||"").replace(/[^a-zA-Z0-9]/g,""));
+let fam=[],me=null,tastes={},kv={},snap=null,tab="today",dayI=0,weekI=0,shopI=0,status="",tT=null,pend={};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const eur=n=>(+n||0).toFixed(2).replace(".",",")+" €";
-async function maisonStart(){
-  try{const r=(await rpc("get_rec",{p_code:code})||[])[0];rec=r&&Array.isArray(r.items)?r.items:[]}catch(e){$("#app").innerHTML=`<div class="card">Impossible de se connecter. Vérifie ta connexion internet et recharge la page.</div>`;return}
-  maisonView();
+async function rpc(fn,body){const r=await fetch(API+fn,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok)throw new Error(await r.text());const t=await r.text();return t?JSON.parse(t):null}
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}}
+function isoD(d){const x=new Date(d);x.setMinutes(x.getMinutes()-x.getTimezoneOffset());return x.toISOString().slice(0,10)}
+const todayS=()=>isoD(new Date());
+function addD(s,n){const d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return isoD(d)}
+function mondayOf(s){const d=new Date(s+"T12:00:00");return addD(s,-((d.getDay()+6)%7))}
+const fmtDate=s=>{const t=new Date(s+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});return t[0].toUpperCase()+t.slice(1)};
+const fmtShort=s=>new Date(s+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"short",day:"numeric"});
+function keep(fn){const y=window.scrollY;fn();window.scrollTo(0,y)}
+
+/* ---------- données partagées ---------- */
+function kvGet(k){return kv[k]?kv[k].v:undefined}
+async function kvSet(k,v){kv[k]={v,t:Date.now()};pend[k]=v;flush()}
+let flushing=null;
+function flush(){if(flushing)return flushing;setStatus("saving");flushing=(async()=>{let ok=true;
+  try{let keys;while((keys=Object.keys(pend)).length){for(const k of keys){const v=pend[k];await rpc("kv_set",{p_code:code,p_k:k,p_v:v});if(pend[k]===v)delete pend[k]}}}catch(e){ok=false}
+  setStatus(ok?"ok":"err");if(!ok)setTimeout(flush,4000)})().finally(()=>{flushing=null});return flushing}
+async function pull(){
+  try{const [rows,sn]=await Promise.all([rpc("kv_all",{p_code:code}),rpc("get_snap",{p_code:code})]);
+    (rows||[]).forEach(r=>{if(pend[r.k]===undefined)kv[r.k]={v:r.v,t:new Date(r.updated_at).getTime()}});
+    if(sn&&sn[0])snap=sn[0].data;return true}catch(e){return false}}
+function recItems(){return Object.keys(kv).filter(k=>k.startsWith("rec:")&&kv[k].v).map(k=>kv[k].v).sort((a,b)=>(+String(a.id).slice(1)||0)-(+String(b.id).slice(1)||0))}
+function wIdx(mon){return Math.round((new Date(mon+"T12:00:00")-new Date(EPOCH+"T12:00:00"))/(7*864e5))}
+function recDue(mon){const w=wIdx(mon),nx=addD(mon,-7);return recItems().filter(it=>it.on&&((((w%it.f)+it.f)%it.f===((+it.o||0)%it.f)&&!kvGet("skip:"+mon+"|"+it.id))||kvGet("skip:"+nx+"|"+it.id)))}
+const price=it=>(+it.p||0)*((snap&&snap.factor)||1);
+function access(){return !!(snap&&me&&(snap.access||[]).includes(me.member_id))}
+
+/* ---------- démarrage ---------- */
+async function start(){
+  if(code.length<24){$("#app").innerHTML=`<div class="hero"><h1>Lien incomplet</h1><p>Demande à nouveau le lien complet : il doit se terminer par un long code après le « # ».</p></div>`;return}
+  try{const [f]=await Promise.all([rpc("get_family",{p_code:code}),pull()]);fam=(f||[]).filter(m=>m.member_id!=="moi")}
+  catch(e){$("#app").innerHTML=`<div class="card">Impossible de se connecter. Vérifie ta connexion internet et recharge la page.</div>`;return}
+  const saved=(want&&fam.find(m=>m.member_id===want))?want:ls("gf_me_"+code);
+  if(saved&&fam.find(m=>m.member_id===saved)){pick(saved,true)}else whoView();
+  setInterval(async()=>{if(document.hidden||!me)return;if(await pull())refresh()},20000);
+  document.addEventListener("visibilitychange",async()=>{if(!document.hidden&&me&&await pull())refresh()});
 }
-function maisonView(){
-  const mon=monday(),d=due(mon),tot=d.reduce((a,it)=>a+(+it.p||0),0),avg=rec.filter(i=>i.on).reduce((a,it)=>a+(+it.p||0)/it.f,0);
-  const cats={};d.forEach(it=>{(cats[it.cat]=cats[it.cat]||[]).push(it)});
-  $("#app").innerHTML=`<div class="top"><b>🧺 Liste maison${me?" · "+esc(me.member_name):""}</b><span class="pill ${status==="ok"?"ok":""}" id="st">${status==="saving"?"Enregistrement…":status==="ok"?"✓ Enregistré":status==="err"?"⚠︎ Pas enregistré":"Prêt"}</span></div>
-  ${rec.length?"":`<div class="card">La liste est vide pour l'instant. Demande d'ouvrir l'app « Ma reconstruction » une fois avec internet, puis recharge cette page.</div>`}
-  <div class="hero"><h1>À acheter cette semaine</h1><p>${d.length} article${d.length>1?"s":""} · ≈ ${eur(tot)} · en moyenne ≈ ${eur(avg)} par semaine</p></div>
-  ${Object.entries(cats).map(([c,its])=>`<div class="card"><h3 style="margin-bottom:6px">${c}</h3>${its.map(it=>`<div class="row"><span>${esc(it.n)}${it.q?` <span class="muted">· ${esc(it.q)}</span>`:""}</span><span class="muted">≈ ${eur(it.p)}</span></div>`).join("")}</div>`).join("")}
-  <h2 style="margin:24px 4px 6px;font-size:20px">Gérer la liste</h2>
-  <p class="muted" style="margin:0 4px 14px;font-size:14px">Coche ce qu'on achète, corrige les prix avec le ticket de caisse, choisis la fréquence. Tout s'enregistre automatiquement.</p>
-  ${REC_CATS.map((c,ci)=>`<div class="card"><h3 style="margin-bottom:8px">${c}</h3>
+function whoView(){$("#navRoot").innerHTML="";
+  $("#app").innerHTML=`<div class="hero"><h1>Salut 👋</h1><p>Bienvenue dans l'espace famille.</p></div>
+  <div class="card"><h3 style="margin-bottom:12px">Qui es-tu ?</h3>${fam.length?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${fam.map(m=>`<button class="btn" style="padding:18px 8px;font-size:17px;font-weight:600" onclick="pick('${esc(m.member_id)}')">${esc(m.member_name)}</button>`).join("")}</div>`:`<p class="muted">Personne n'est encore inscrit.</p>`}</div>`}
+function pick(id,first){me=fam.find(m=>m.member_id===id);tastes=Object.assign({},me.tastes||{});ls("gf_me_"+code,id);
+  tab=access()?(mode==="maison"?"maison":"today"):"gouts";refresh();window.scrollTo(0,0)}
+function go(t){tab=t;refresh();window.scrollTo(0,0)}
+function refresh(){if(!me)return;nav();(V[tab]||V.gouts)()}
+function nav(){if(!access()){$("#navRoot").innerHTML="";return}
+  const T=[["today","🍽️","Aujourd'hui"],["week","🗓️","Semaine"],["shop","🛒","Courses"],["maison","🧺","Maison"],["gouts","😋","Goûts"]];
+  $("#navRoot").innerHTML=`<div class="nav">${T.map(([k,e,l])=>`<button class="${tab===k?"on":""}" onclick="go('${k}')"><span>${e}</span>${l}</button>`).join("")}</div>`}
+function setStatus(s){status=s;const el=$("#st");if(el){el.className="pill "+(s==="ok"?"ok":"");el.textContent=s==="saving"?"Enregistrement…":s==="ok"?"✓ Enregistré":"⚠︎ Hors ligne"}}
+const stPill=()=>`<span class="pill ${status==="ok"?"ok":""}" id="st">${status==="saving"?"Enregistrement…":status==="ok"?"✓ Enregistré":status==="err"?"⚠︎ Hors ligne":"✓ À jour"}</span>`;
+const V={};
+
+/* ---------- Aujourd'hui ---------- */
+function snapDays(){return snap?Object.keys(snap.days).sort():[]}
+V.today=()=>{
+  const ds=snapDays().filter(d=>d>=todayS());if(!ds.length){$("#app").innerHTML=noSnap();return}
+  dayI=Math.min(dayI,ds.length-1);const d=ds[dayI],o=snap.days[d]||{};
+  $("#app").innerHTML=`<div class="top"><b>Bonjour ${esc(me.member_name)} 👋</b>${stPill()}</div>
+   <div class="daynav"><button class="circle" ${dayI===0?"disabled":""} onclick="dayI--;refresh()">‹</button><b>${dayI===0?"Aujourd'hui":fmtDate(d)}</b><button class="circle" ${dayI>=ds.length-1?"disabled":""} onclick="dayI++;refresh()">›</button></div>
+   ${[["dej","Déjeuner","🍽️"],["diner","Dîner","🌙"]].map(([sl,lab,em])=>{const r=o[sl];return r?`<div class="card meal" onclick="recipe('${d}','${sl}')"><div class="em">${em}</div><div style="flex:1"><div class="muted small">${lab}${r.done?" · ✓ mangé":""}</div><h3>${esc(r.n)}</h3>
+     <span class="tag">⏱ ${r.m} min</span><span class="tag b">≈ ${eur(r.c)} · ${snap.people} pers.</span>${r.fans&&r.fans.length?`<div class="small" style="margin-top:6px;color:var(--terra)">😋 ${r.fans.map(esc).join(", ")}</div>`:""}</div><span class="muted">›</span></div>`:""}).join("")}
+   <p class="muted small" style="text-align:center">${esc(snap.season||"")} · touche un plat pour voir la recette</p>`};
+function recipe(d,sl){const r=snap.days[d][sl];
+  $("#sheetRoot").innerHTML=`<div class="sheet" onclick="if(event.target===this)this.remove()"><div>
+   <div class="muted small">${sl==="dej"?"Déjeuner":"Dîner"} · ${fmtDate(d)}</div><h2 style="margin:4px 0 6px">${esc(r.n)}</h2>
+   <span class="tag">⏱ ${r.m} min</span><span class="tag b">≈ ${eur(r.c)}</span>
+   <h3 style="margin:16px 0 4px">Ingrédients pour ${snap.people}</h3>
+   ${r.i.map(([l,q])=>`<div class="row"><span>${esc(l)}</span><span><b>${esc(q)}</b></span></div>`).join("")}${r.x.map(x=>`<div class="row muted"><span>${esc(x)}</span><span>placard</span></div>`).join("")}
+   <h3 style="margin:16px 0 4px">Préparation</h3><ol>${r.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
+   <button class="btn pri" style="width:100%;margin-top:8px" onclick="$('#sheetRoot').innerHTML=''">Fermer</button></div></div>`}
+function noSnap(){return `<div class="card">Les menus ne sont pas encore disponibles. Ils arrivent dès que l'app « Ma reconstruction » est ouverte sur le PC avec internet.</div>`}
+
+/* ---------- Semaine ---------- */
+V.week=()=>{if(!snap){$("#app").innerHTML=noSnap();return}
+  const mons=[...new Set(snapDays().map(mondayOf))];weekI=Math.min(weekI,mons.length-1);const mon=mons[weekI];
+  const ds=[...Array(7)].map((_,i)=>addD(mon,i)).filter(d=>snap.days[d]);
+  $("#app").innerHTML=`<div class="top"><b>🗓️ Les repas</b>${stPill()}</div>
+   <div class="daynav"><button class="circle" ${weekI===0?"disabled":""} onclick="weekI--;refresh()">‹</button><b>${weekI===0?"Cette semaine":weekI===1?"Semaine prochaine":"Semaine du "+fmtShort(mon)}</b><button class="circle" ${weekI>=mons.length-1?"disabled":""} onclick="weekI++;refresh()">›</button></div>
+   ${ds.map(d=>{const o=snap.days[d];return `<div class="card"><div style="font-weight:650;margin-bottom:6px;${d===todayS()?"color:var(--lime)":""}">${fmtDate(d)}</div>
+     ${[["dej","☀️ Midi"],["diner","🌙 Soir"]].map(([sl,l])=>o[sl]?`<div class="row" style="cursor:pointer" onclick="recipe('${d}','${sl}')"><span><span class="muted small">${l}</span><br>${esc(o[sl].n)}</span><span class="muted">›</span></div>`:"").join("")}</div>`}).join("")}`};
+
+/* ---------- Courses ---------- */
+function ck(key){return !!kvGet("check:"+key)}
+function toggle(key){kvSet("check:"+key,!ck(key));keep(refresh)}
+V.shop=()=>{if(!snap){$("#app").innerHTML=noSnap();return}
+  const W=snap.weeks.filter(w=>addD(w.mon,6)>=todayS());shopI=Math.min(shopI,W.length-1);const w=W[shopI],due=recDue(w.mon),recW=due.reduce((a,it)=>a+price(it),0),B=snap.budgetW,tot=w.mealsW+recW;
+  const left=w.stores.reduce((a,s)=>a+s.cats.reduce((b,[c,its])=>b+its.filter(i=>!ck(i.key)).length,0),0)+due.filter(it=>!ck(w.mon+"|rec"+it.id)).length;
+  const rc={};due.forEach(it=>{(rc[it.cat]=rc[it.cat]||[]).push(it)});
+  $("#app").innerHTML=`<div class="top"><b>🛒 Courses</b>${stPill()}</div>
+   <div class="daynav"><button class="circle" ${shopI===0?"disabled":""} onclick="shopI--;refresh()">‹</button><b>${shopI===0?"Cette semaine":shopI===1?"Semaine prochaine":"Semaine du "+fmtShort(w.mon)}</b><button class="circle" ${shopI>=W.length-1?"disabled":""} onclick="shopI++;refresh()">›</button></div>
+   <div class="card"><div style="display:flex;justify-content:space-between"><span class="muted">Repas</span><b>≈ ${eur(w.mealsW)}</b></div>
+    <div style="display:flex;justify-content:space-between"><span class="muted">Maison, soins, animaux</span><b>≈ ${eur(recW)}</b></div>
+    <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:18px"><span>Total</span><b style="color:${B&&tot>B+0.5?"var(--terra)":"var(--lime)"}">≈ ${eur(tot)}</b></div>
+    ${B?`<div class="bar"><div style="width:${Math.min(100,tot/B*100)}%;${tot>B+0.5?"background:var(--terra)":""}"></div></div><div class="muted small" style="margin-top:4px">Budget : ${eur(B)}${tot>B+0.5?" · au-dessus : reporte des achats maison avec ⏭":""}</div>`:""}
+    <div class="muted small" style="margin-top:6px">${left} article${left>1?"s":""} restant${left>1?"s":""}</div></div>
+   ${w.stores.map(s=>`<div class="card"><h3>🛒 ${esc(s.st)}</h3>${s.cats.map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(i=>`<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t">${esc(i.l)}${i.q?` <b style="color:var(--lime)">${esc(i.q)}</b>`:""}${i.pk?`<div class="muted small">${esc(i.pk)}</div>`:""}${i.solo&&!i.q?`<div class="muted small">pour ${esc(snap.me)}</div>`:""}</div></div>`).join("")}`).join("")}
+     ${s.ex.length?`<div class="cat">Placard (vérifier)</div>${s.ex.map(i=>`<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t">${esc(i.l)}</div></div>`).join("")}`:""}</div>`).join("")}
+   ${due.length?`<div class="card"><h3>🧺 Maison, soins & animaux</h3>${Object.entries(rc).map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(it=>{const k=w.mon+"|rec"+it.id;return `<div style="display:flex;align-items:center;gap:6px"><div class="chk ${ck(k)?"on":""}" style="flex:1" onclick="toggle('${k}')"><div class="box">${ck(k)?"✓":""}</div><div class="t">${esc(it.n)}${it.q?` <b style="color:var(--lime)">${esc(it.q)}</b>`:""} <span class="muted small">≈ ${eur(price(it))}</span></div></div><button class="btn" style="padding:6px 9px" title="Reporter à la semaine prochaine" onclick="skip('${w.mon}','${it.id}')">⏭</button></div>`}).join("")}`).join("")}
+    <p class="muted small" style="margin:8px 0 0">⏭ = reporter l'achat à la semaine prochaine</p></div>`:""}`};
+function skip(mon,id){const k="skip:"+mon+"|"+id;kvSet(k,!kvGet(k));toast(kvGet(k)?"Reporté à la semaine prochaine":"Remis cette semaine");keep(refresh)}
+
+/* ---------- Maison ---------- */
+V.maison=()=>{const rec=recItems(),avg=rec.filter(i=>i.on).reduce((a,it)=>a+price(it)/it.f,0);
+  $("#app").innerHTML=`<div class="top"><b>🧺 Liste maison</b>${stPill()}</div>
+   <div class="hero"><h1>Maison, soins & animaux</h1><p>≈ ${eur(avg)} par semaine en moyenne · coche ce qu'on achète, corrige les prix, choisis la fréquence</p></div>
+   ${REC_CATS.map((c,ci)=>`<div class="card"><h3 style="margin-bottom:6px">${c}</h3>
    ${rec.filter(it=>it.cat===c).map(it=>`<div style="padding:10px 0;border-bottom:1px dashed var(--line);${it.on?"":"opacity:.5"}">
      <div style="display:flex;gap:8px;align-items:center"><input type="checkbox" ${it.on?"checked":""} onchange="rset('${it.id}','on',this.checked)" style="width:22px;height:22px;accent-color:#c6f36d">
-      <input class="in" value="${esc(it.n)}" onchange="rset('${it.id}','n',this.value)" style="flex:1"><button class="btn" onclick="rdel('${it.id}')" aria-label="Supprimer">✕</button></div>
+      <input class="in" value="${esc(it.n)}" onchange="rset('${it.id}','n',this.value)" style="flex:1;min-width:0"><button class="btn" style="padding:8px 10px" onclick="rdel('${it.id}')">✕</button></div>
      <div style="display:flex;gap:8px;margin-top:8px;padding-left:30px"><input class="in" value="${esc(it.q||"")}" placeholder="Quantité" onchange="rset('${it.id}','q',this.value)" style="flex:1;min-width:0">
-      <input class="in" type="number" inputmode="decimal" step="0.1" value="${it.p}" onchange="rset('${it.id}','p',parseFloat(this.value.replace(',','.'))||0)" style="width:76px"><span class="muted" style="align-self:center">€</span></div>
-     <div style="padding-left:30px;margin-top:8px"><select class="in" onchange="rset('${it.id}','f',+this.value)" style="width:100%">${FREQ.map(([v,l])=>`<option value="${v}" ${+it.f===v?"selected":""}>${l}</option>`).join("")}</select></div>
-   </div>`).join("")}
-   <div style="display:flex;gap:8px;margin-top:10px"><input class="in" id="add${ci}" placeholder="Ajouter un article…" style="flex:1" onkeydown="if(event.key==='Enter')radd(${ci})"><button class="btn" onclick="radd(${ci})">Ajouter</button></div></div>`).join("")}`;
-}
-function rkeep(){const y=window.scrollY;maisonView();window.scrollTo(0,y)}
-function rqueue(){setStatus("saving");clearTimeout(recT);recT=setTimeout(rsave,800)}
-async function rsave(){try{await rpc("save_rec",{p_code:code,p_items:rec});setStatus("ok")}catch(e){setStatus("err");toast("Pas de connexion : réessaie dans un instant")}}
-function rset(id,k,v){const it=rec.find(x=>x.id===id);if(!it)return;it[k]=v;rqueue();if(k==="on"||k==="f"||k==="p")rkeep()}
-function rdel(id){rec=rec.filter(x=>x.id!==id);rqueue();rkeep()}
-function radd(ci){const el=$("#add"+ci),n=el.value.trim();if(!n)return;rec.push({id:"r"+Date.now(),cat:REC_CATS[ci],n,q:"",p:0,f:4,on:true,o:0});rqueue();rkeep()}
+      <input class="in" type="number" inputmode="decimal" step="0.1" value="${it.p}" onchange="rset('${it.id}','p',parseFloat(this.value.replace(',','.'))||0)" style="width:78px"><span class="muted" style="align-self:center">€</span></div>
+     <div style="padding-left:30px;margin-top:8px"><select class="in" onchange="rset('${it.id}','f',+this.value)" style="width:100%">${FREQ.map(([v,l])=>`<option value="${v}" ${+it.f===v?"selected":""}>${l}</option>`).join("")}</select></div></div>`).join("")}
+   <div style="display:flex;gap:8px;margin-top:10px"><input class="in" id="add${ci}" placeholder="Ajouter un article…" style="flex:1;min-width:0" onkeydown="if(event.key==='Enter')radd(${ci})"><button class="btn" onclick="radd(${ci})">Ajouter</button></div></div>`).join("")}`};
+function rset(id,k,v){const it=Object.assign({},kvGet("rec:"+id));it[k]=v;kvSet("rec:"+id,it);if(k!=="n"&&k!=="q")keep(refresh)}
+function rdel(id){kvSet("rec:"+id,null);keep(refresh)}
+function radd(ci){const el=$("#add"+ci),n=el.value.trim();if(!n)return;const it={id:"r"+Date.now(),cat:REC_CATS[ci],n,q:"",p:0,f:4,on:true,o:0};kvSet("rec:"+it.id,it);keep(refresh)}
+
+/* ---------- Goûts ---------- */
+V.gouts=()=>{const n=Object.keys(tastes).length;
+  $("#app").innerHTML=`<div class="top"><b>😋 Goûts de ${esc(me.member_name)}</b>${stPill()}${access()?"":`<button class="btn" onclick="me=null;whoView()">Changer</button>`}</div>
+  <div class="card"><div style="display:flex;justify-content:space-between"><span><b>${n}</b> / ${TOTAL} aliments</span><span class="muted">${n===TOTAL?"Complet 🎉":""}</span></div><div class="bar"><div style="width:${n/TOTAL*100}%"></div></div>
+   <p class="muted small" style="margin:10px 0 0">😋 j'adore · 🙂 ça va · ✖ je n'en veux pas. Tout s'enregistre automatiquement. Un ✖ enlève les plats qui contiennent cet aliment.</p></div>
+  ${Object.entries(ALIMENTS).map(([c,l],ci)=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><h3>${c}</h3><span class="muted small">Tout : <button class="btn" style="padding:4px 8px" onclick="tall(${ci},'l')">😋</button> <button class="btn" style="padding:4px 8px" onclick="tall(${ci},'o')">🙂</button></span></div>
+   ${l.map(([k,lab])=>`<div class="row"><span>${esc(lab)}</span><span class="b3">
+    <button class="${tastes[k]==="l"?"on l":""}" onclick="tset('${k}','l')">😋</button><button class="${tastes[k]==="o"?"on o":""}" onclick="tset('${k}','o')">🙂</button><button class="${tastes[k]==="n"?"on n":""}" onclick="tset('${k}','n')">✖</button></span></div>`).join("")}</div>`).join("")}`};
+function tset(k,v){if(tastes[k]===v)delete tastes[k];else tastes[k]=v;tq();keep(refresh)}
+function tall(ci,v){Object.values(ALIMENTS)[ci].forEach(([k])=>{if(!tastes[k])tastes[k]=v});tq();keep(refresh)}
+function tq(){setStatus("saving");clearTimeout(tT);tT=setTimeout(async()=>{try{await rpc("save_tastes",{p_code:code,p_member:me.member_id,p_name:me.member_name,p_tastes:tastes});me.tastes=Object.assign({},tastes);setStatus("ok")}catch(e){setStatus("err")}},700)}
 start();
 </script>
 </body>
