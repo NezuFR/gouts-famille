@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Famille">
 <meta name="robots" content="noindex">
+<meta http-equiv="Cache-Control" content="no-cache">
 <title>Famille 🍽️</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23c6f36d'/><text x='50' y='68' font-size='56' text-anchor='middle'>🍽️</text></svg>">
 <style>
@@ -61,6 +62,7 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
 <div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
+const PAGE_V="2026-11-17-3";
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
 const ALIMENTS = {
@@ -210,6 +212,10 @@ V.gouts=()=>{const n=Object.keys(tastes).length;
 function tset(k,v){if(tastes[k]===v)delete tastes[k];else tastes[k]=v;tq();keep(refresh)}
 function tall(ci,v){Object.values(ALIMENTS)[ci].forEach(([k])=>{if(!tastes[k])tastes[k]=v});tq();keep(refresh)}
 function tq(){setStatus("saving");clearTimeout(tT);tT=setTimeout(async()=>{try{await rpc("save_tastes",{p_code:code,p_member:me.member_id,p_name:me.member_name,p_tastes:tastes});me.tastes=Object.assign({},tastes);setStatus("ok")}catch(e){setStatus("err")}},700)}
+/* Mise à jour automatique de la page elle-même : si une nouvelle version est publiée, elle se recharge toute seule */
+async function checkVersion(){try{const h=await (await fetch(location.pathname+"?v="+Date.now(),{cache:"no-store"})).text();const m=h.match(/PAGE_V="([^"]+)"/);
+  if(m&&m[1]!==PAGE_V&&!Object.keys(pend).length)location.reload()}catch(e){}}
+setInterval(checkVersion,5*60*1000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkVersion()});
 start();
 </script>
 </body>
