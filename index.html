@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0e10">
+<meta name="robots" content="noindex">
+<title>Nos goûts 🍽️</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>😋</text></svg>">
+<style>
+:root{--bg:#0d0e10;--card:#1a1c20;--card2:#24262b;--ink:#f1f2ee;--muted:#8e939b;--line:#26292e;--lime:#c6f36d;--terra:#ff9d5c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:640px;margin:0 auto;padding:18px 16px 90px}
+.hero{background:linear-gradient(135deg,#c6f36d,#a6e04a);color:#15200a;border-radius:24px;padding:22px;margin-bottom:16px}
+.hero h1{margin:0 0 6px;font-size:24px;letter-spacing:-.4px}.hero p{margin:0;opacity:.8;font-size:15px}
+.card{background:var(--card);border-radius:22px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(255,255,255,.04)}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.who button{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:18px 10px;font:inherit;font-size:17px;font-weight:600;cursor:pointer}
+.who button small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-top:3px}
+.top{position:sticky;top:0;z-index:5;background:rgba(13,14,16,.92);backdrop-filter:blur(10px);padding:12px 16px;margin:0 -16px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.top b{flex:1}
+.pill{font-size:12.5px;padding:4px 10px;border-radius:20px;background:var(--card2);color:var(--muted);white-space:nowrap}
+.pill.ok{background:rgba(198,243,109,.15);color:var(--lime)}
+.bar{height:8px;background:var(--card2);border-radius:8px;overflow:hidden;margin-top:6px}.bar div{height:100%;background:var(--lime);transition:width .3s}
+h3{margin:0;font-size:17px}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px}
+.ch .all{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
+.ch .all button{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:4px 8px;font-size:15px;cursor:pointer}
+.row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);gap:10px}
+.row:last-child{border:0}
+.b{display:flex;gap:6px;flex-shrink:0}
+.b button{width:46px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card2);font-size:19px;cursor:pointer;opacity:.6;transition:.12s}
+.b button.on{opacity:1}.b button.on.l{background:var(--terra);border-color:var(--terra)}.b button.on.o{background:var(--lime);border-color:var(--lime)}.b button.on.n{background:#4a505c;border-color:#4a505c}
+.btn{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
+.muted{color:var(--muted)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2a2f38;color:var(--ink);padding:11px 18px;border-radius:14px;font-size:14px;border:1px solid #3a404b;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.done{background:var(--lime);color:#15200a;border:0;border-radius:16px;padding:15px;width:100%;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
+<script>
+const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
+const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
+const ALIMENTS = {
+ "Féculents & céréales":[["riz","Riz"],["pates","Pâtes / nouilles"],["pommes_de_terre","Pommes de terre"],["patate_douce","Patate douce"],["pain","Pain"],["semoule","Semoule"],["boulgour","Boulgour"],["quinoa","Quinoa"],["gnocchis","Gnocchis"],["tortillas","Tortillas / wraps"],["flocons_avoine","Flocons d'avoine"],["cereales","Céréales du petit-déj"],["granola","Granola / muesli"]],
+ "Légumineuses":[["lentilles","Lentilles"],["pois_chiches","Pois chiches / houmous"],["haricots_rouges","Haricots rouges"]],
+ "Viandes, poissons & œufs":[["poulet","Poulet"],["dinde","Dinde"],["boeuf","Bœuf (steak, pièce)"],["steak_hache","Steak haché / viande hachée"],["porc","Porc"],["jambon","Jambon"],["lardons","Lardons"],["saucisse","Saucisses / merguez"],["chorizo","Chorizo"],["saumon","Saumon"],["thon","Thon"],["cabillaud","Cabillaud / poisson blanc"],["crevettes","Crevettes"],["oeufs","Œufs"],["tofu","Tofu"]],
+ "Produits laitiers":[["lait","Lait"],["yaourt","Yaourt"],["fromage_blanc","Fromage blanc"],["creme_fraiche","Crème fraîche"],["beurre","Beurre"],["emmental","Emmental / gruyère râpé"],["mozzarella","Mozzarella"],["parmesan","Parmesan"],["chevre","Chèvre"],["feta","Feta"],["camembert","Camembert / reblochon"]],
+ "Légumes":[["tomate","Tomate"],["courgette","Courgette"],["aubergine","Aubergine"],["carotte","Carotte"],["poivron","Poivron"],["brocoli","Brocoli"],["chou_fleur","Chou-fleur"],["epinards","Épinards"],["champignons","Champignons"],["oignon","Oignon"],["ail","Ail"],["poireau","Poireau"],["potiron","Potiron / butternut"],["haricots_verts","Haricots verts"],["petits_pois","Petits pois"],["mais","Maïs"],["concombre","Concombre"],["salade","Salade verte"],["avocat","Avocat"]],
+ "Fruits":[["banane","Banane"],["pomme","Pomme"],["poire","Poire"],["fraise","Fraises"],["fruits_rouges","Fruits rouges"],["orange","Orange / clémentine"],["mangue","Mangue"],["ananas","Ananas"],["kiwi","Kiwi"],["compote","Compote"],["fruits_secs","Fruits secs (abricots, raisins…)"]],
+ "Fruits à coque & sucré":[["amandes","Amandes"],["noix","Noix"],["beurre_cacahuete","Beurre de cacahuète"],["pate_tartiner","Pâte à tartiner"],["chocolat","Chocolat"],["miel","Miel"],["confiture","Confiture"]],
+ "Sauces & saveurs":[["sauce_tomate","Sauce tomate"],["pesto","Pesto"],["curry","Curry / épices douces"],["lait_coco","Lait de coco"],["sauce_soja","Sauce soja"],["cannelle","Cannelle"]]
+};
+const TOTAL=Object.values(ALIMENTS).flat().length;
+const code=(location.hash||"").slice(1).replace(/[^a-zA-Z0-9]/g,"");
+let fam=[],me=null,tastes={},timer=null,status="";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function rpc(fn,body){const r=await fetch(API+fn,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok)throw new Error(await r.text());const t=await r.text();return t?JSON.parse(t):null}
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}}
+
+async function start(){
+  if(code.length<24){$("#app").innerHTML=`<div class="hero"><h1>Lien incomplet</h1><p>Demande à nouveau le lien complet : il doit se terminer par un long code après le « # ».</p></div>`;return}
+  try{fam=await rpc("get_family",{p_code:code})}catch(e){$("#app").innerHTML=`<div class="card">Impossible de se connecter. Vérifie ta connexion internet et recharge la page.</div>`;return}
+  fam=(fam||[]).filter(m=>m.member_id!=="moi");
+  const saved=ls("gf_me_"+code);
+  if(saved&&fam.find(m=>m.member_id===saved))pick(saved);else whoView();
+}
+function whoView(){
+  $("#app").innerHTML=`<div class="hero"><h1>Salut 👋</h1><p>On prépare les repas de la famille. Dis-nous ce que tu aimes, comme ça il n'y aura que des plats qui te plaisent !</p></div>
+  <div class="card"><h3 style="margin-bottom:12px">Qui es-tu ?</h3>
+  ${fam.length?`<div class="who">${fam.map(m=>`<button onclick="pick('${esc(m.member_id)}')">${esc(m.member_name)}<small>${Object.keys(m.tastes||{}).length}/${TOTAL} aliments</small></button>`).join("")}</div>`:`<p class="muted">Personne n'est encore inscrit. Demande d'ouvrir l'app « Ma reconstruction » une fois avec internet, puis recharge cette page.</p>`}</div>`;
+}
+function pick(id){me=fam.find(m=>m.member_id===id);tastes=Object.assign({},me.tastes||{});ls("gf_me_"+code,id);view();window.scrollTo(0,0)}
+function view(){
+  const n=Object.keys(tastes).length;
+  $("#app").innerHTML=`<div class="top"><b>😋 ${esc(me.member_name)}</b><span class="pill ${status==="ok"?"ok":""}" id="st">${status==="saving"?"Enregistrement…":status==="ok"?"✓ Enregistré":status==="err"?"⚠︎ Pas enregistré":"Prêt"}</span><button class="btn" onclick="me=null;whoView()">Changer</button></div>
+  <div class="card"><div style="display:flex;justify-content:space-between"><span><b>${n}</b> / ${TOTAL} aliments</span><span class="muted">${n===TOTAL?"Complet 🎉":""}</span></div><div class="bar"><div style="width:${n/TOTAL*100}%"></div></div>
+   <div class="legend" style="margin-top:12px"><span>😋 j'adore</span><span>🙂 ça va</span><span>✖ je n'en veux pas</span></div>
+   <p class="muted" style="font-size:13.5px;margin:10px 0 0">Tout s'enregistre automatiquement. Un ✖ enlève les plats qui contiennent cet aliment : n'en mets que sur ce que tu ne veux vraiment pas manger.</p></div>
+  ${Object.entries(ALIMENTS).map(([c,l],ci)=>`<div class="card"><div class="ch"><h3>${c}</h3><span class="all">Tout :<button onclick="all(${ci},'l')">😋</button><button onclick="all(${ci},'o')">🙂</button></span></div>
+   ${l.map(([k,lab])=>`<div class="row"><span>${esc(lab)}</span><span class="b">
+    <button class="${tastes[k]==="l"?"on l":""}" onclick="set('${k}','l')" aria-label="J'adore">😋</button>
+    <button class="${tastes[k]==="o"?"on o":""}" onclick="set('${k}','o')" aria-label="Ça va">🙂</button>
+    <button class="${tastes[k]==="n"?"on n":""}" onclick="set('${k}','n')" aria-label="Je n'en veux pas">✖</button></span></div>`).join("")}</div>`).join("")}
+  <button class="done" onclick="saveNow(true)">C'est bon, j'ai fini ✓</button>`;
+}
+function rerender(){const y=window.scrollY;view();window.scrollTo(0,y)}
+function set(k,v){if(tastes[k]===v)delete tastes[k];else tastes[k]=v;queue();rerender()}
+function all(ci,v){Object.values(ALIMENTS)[ci].forEach(([k])=>{if(!tastes[k])tastes[k]=v});queue();rerender()}
+function setStatus(s){status=s;const el=$("#st");if(el){el.className="pill "+(s==="ok"?"ok":"");el.textContent=s==="saving"?"Enregistrement…":s==="ok"?"✓ Enregistré":"⚠︎ Pas enregistré"}}
+function queue(){setStatus("saving");clearTimeout(timer);timer=setTimeout(()=>saveNow(false),700)}
+async function saveNow(final){clearTimeout(timer);setStatus("saving");
+  try{await rpc("save_tastes",{p_code:code,p_member:me.member_id,p_name:me.member_name,p_tastes:tastes});me.tastes=Object.assign({},tastes);setStatus("ok");if(final)toast("Merci ! Tes goûts sont enregistrés 💛")}
+  catch(e){setStatus("err");toast("Pas de connexion : réessaie dans un instant")}}
+window.addEventListener("beforeunload",e=>{if(status==="saving"){saveNow(false)}});
+start();
+</script>
+</body>
+</html>
