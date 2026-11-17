@@ -29,6 +29,7 @@ h3{margin:0;font-size:17px}
 .ch .all button{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:4px 8px;font-size:15px;cursor:pointer}
 .row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);gap:10px}
 .row:last-child{border:0}
+.row>span:last-child{white-space:nowrap}
 .b{display:flex;gap:6px;flex-shrink:0}
 .b button{width:46px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card2);font-size:19px;cursor:pointer;opacity:.6;transition:.12s}
 .b button.on{opacity:1}.b button.on.l{background:var(--terra);border-color:var(--terra)}.b button.on.o{background:var(--lime);border-color:var(--lime)}.b button.on.n{background:#4a505c;border-color:#4a505c}
@@ -36,6 +37,7 @@ h3{margin:0;font-size:17px}
 .muted{color:var(--muted)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2a2f38;color:var(--ink);padding:11px 18px;border-radius:14px;font-size:14px;border:1px solid #3a404b;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.in{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 11px;font:inherit;font-size:15px}
 .done{background:var(--lime);color:#15200a;border:0;border-radius:16px;padding:15px;width:100%;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
 </style>
 </head>
@@ -55,7 +57,7 @@ const ALIMENTS = {
  "Sauces & saveurs":[["sauce_tomate","Sauce tomate"],["pesto","Pesto"],["curry","Curry / épices douces"],["lait_coco","Lait de coco"],["sauce_soja","Sauce soja"],["cannelle","Cannelle"]]
 };
 const TOTAL=Object.values(ALIMENTS).flat().length;
-const [code,want]=(location.hash||"").slice(1).split(".").map(x=>(x||"").replace(/[^a-zA-Z0-9]/g,""));
+const [code,want,mode]=(location.hash||"").slice(1).split(".").map(x=>(x||"").replace(/[^a-zA-Z0-9]/g,""));
 let fam=[],me=null,tastes={},timer=null,status="";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -67,6 +69,7 @@ async function start(){
   if(code.length<24){$("#app").innerHTML=`<div class="hero"><h1>Lien incomplet</h1><p>Demande à nouveau le lien complet : il doit se terminer par un long code après le « # ».</p></div>`;return}
   try{fam=await rpc("get_family",{p_code:code})}catch(e){$("#app").innerHTML=`<div class="card">Impossible de se connecter. Vérifie ta connexion internet et recharge la page.</div>`;return}
   fam=(fam||[]).filter(m=>m.member_id!=="moi");
+  if(mode==="maison"){me=fam.find(m=>m.member_id===want)||null;return maisonStart()}
   const saved=(want&&fam.find(m=>m.member_id===want))?want:ls("gf_me_"+code);
   if(saved&&fam.find(m=>m.member_id===saved))pick(saved);else whoView();
 }
@@ -98,6 +101,46 @@ async function saveNow(final){clearTimeout(timer);setStatus("saving");
   try{await rpc("save_tastes",{p_code:code,p_member:me.member_id,p_name:me.member_name,p_tastes:tastes});me.tastes=Object.assign({},tastes);setStatus("ok");if(final)toast("Merci ! Tes goûts sont enregistrés 💛")}
   catch(e){setStatus("err");toast("Pas de connexion : réessaie dans un instant")}}
 window.addEventListener("beforeunload",e=>{if(status==="saving"){saveNow(false)}});
+
+/* ---------- Liste Maison, soins & animaux ---------- */
+const REC_CATS=["🥖 Petits-déj & goûters de la famille","🧺 Ménage","🧴 Hygiène & soins","💄 Maquillage","🐶 Chien","🐱 Chat"];
+const FREQ=[[1,"chaque semaine"],[2,"toutes les 2 semaines"],[4,"chaque mois"],[8,"tous les 2 mois"],[12,"tous les 3 mois"]];
+const EPOCH="2026-11-16";
+let rec=[],recT=null;
+function isoD(d){const x=new Date(d);x.setMinutes(x.getMinutes()-x.getTimezoneOffset());return x.toISOString().slice(0,10)}
+function monday(){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return isoD(d)}
+function wIdx(mon){return Math.round((new Date(mon+"T12:00:00")-new Date(EPOCH+"T12:00:00"))/(7*864e5))}
+function due(mon){const w=wIdx(mon);return rec.filter(it=>it.on&&((w%it.f)+it.f)%it.f===((+it.o||0)%it.f))}
+const eur=n=>(+n||0).toFixed(2).replace(".",",")+" €";
+async function maisonStart(){
+  try{const r=(await rpc("get_rec",{p_code:code})||[])[0];rec=r&&Array.isArray(r.items)?r.items:[]}catch(e){$("#app").innerHTML=`<div class="card">Impossible de se connecter. Vérifie ta connexion internet et recharge la page.</div>`;return}
+  maisonView();
+}
+function maisonView(){
+  const mon=monday(),d=due(mon),tot=d.reduce((a,it)=>a+(+it.p||0),0),avg=rec.filter(i=>i.on).reduce((a,it)=>a+(+it.p||0)/it.f,0);
+  const cats={};d.forEach(it=>{(cats[it.cat]=cats[it.cat]||[]).push(it)});
+  $("#app").innerHTML=`<div class="top"><b>🧺 Liste maison${me?" · "+esc(me.member_name):""}</b><span class="pill ${status==="ok"?"ok":""}" id="st">${status==="saving"?"Enregistrement…":status==="ok"?"✓ Enregistré":status==="err"?"⚠︎ Pas enregistré":"Prêt"}</span></div>
+  ${rec.length?"":`<div class="card">La liste est vide pour l'instant. Demande d'ouvrir l'app « Ma reconstruction » une fois avec internet, puis recharge cette page.</div>`}
+  <div class="hero"><h1>À acheter cette semaine</h1><p>${d.length} article${d.length>1?"s":""} · ≈ ${eur(tot)} · en moyenne ≈ ${eur(avg)} par semaine</p></div>
+  ${Object.entries(cats).map(([c,its])=>`<div class="card"><h3 style="margin-bottom:6px">${c}</h3>${its.map(it=>`<div class="row"><span>${esc(it.n)}${it.q?` <span class="muted">· ${esc(it.q)}</span>`:""}</span><span class="muted">≈ ${eur(it.p)}</span></div>`).join("")}</div>`).join("")}
+  <h2 style="margin:24px 4px 6px;font-size:20px">Gérer la liste</h2>
+  <p class="muted" style="margin:0 4px 14px;font-size:14px">Coche ce qu'on achète, corrige les prix avec le ticket de caisse, choisis la fréquence. Tout s'enregistre automatiquement.</p>
+  ${REC_CATS.map((c,ci)=>`<div class="card"><h3 style="margin-bottom:8px">${c}</h3>
+   ${rec.filter(it=>it.cat===c).map(it=>`<div style="padding:10px 0;border-bottom:1px dashed var(--line);${it.on?"":"opacity:.5"}">
+     <div style="display:flex;gap:8px;align-items:center"><input type="checkbox" ${it.on?"checked":""} onchange="rset('${it.id}','on',this.checked)" style="width:22px;height:22px;accent-color:#c6f36d">
+      <input class="in" value="${esc(it.n)}" onchange="rset('${it.id}','n',this.value)" style="flex:1"><button class="btn" onclick="rdel('${it.id}')" aria-label="Supprimer">✕</button></div>
+     <div style="display:flex;gap:8px;margin-top:8px;padding-left:30px"><input class="in" value="${esc(it.q||"")}" placeholder="Quantité" onchange="rset('${it.id}','q',this.value)" style="flex:1;min-width:0">
+      <input class="in" type="number" inputmode="decimal" step="0.1" value="${it.p}" onchange="rset('${it.id}','p',parseFloat(this.value.replace(',','.'))||0)" style="width:76px"><span class="muted" style="align-self:center">€</span></div>
+     <div style="padding-left:30px;margin-top:8px"><select class="in" onchange="rset('${it.id}','f',+this.value)" style="width:100%">${FREQ.map(([v,l])=>`<option value="${v}" ${+it.f===v?"selected":""}>${l}</option>`).join("")}</select></div>
+   </div>`).join("")}
+   <div style="display:flex;gap:8px;margin-top:10px"><input class="in" id="add${ci}" placeholder="Ajouter un article…" style="flex:1" onkeydown="if(event.key==='Enter')radd(${ci})"><button class="btn" onclick="radd(${ci})">Ajouter</button></div></div>`).join("")}`;
+}
+function rkeep(){const y=window.scrollY;maisonView();window.scrollTo(0,y)}
+function rqueue(){setStatus("saving");clearTimeout(recT);recT=setTimeout(rsave,800)}
+async function rsave(){try{await rpc("save_rec",{p_code:code,p_items:rec});setStatus("ok")}catch(e){setStatus("err");toast("Pas de connexion : réessaie dans un instant")}}
+function rset(id,k,v){const it=rec.find(x=>x.id===id);if(!it)return;it[k]=v;rqueue();if(k==="on"||k==="f"||k==="p")rkeep()}
+function rdel(id){rec=rec.filter(x=>x.id!==id);rqueue();rkeep()}
+function radd(ci){const el=$("#add"+ci),n=el.value.trim();if(!n)return;rec.push({id:"r"+Date.now(),cat:REC_CATS[ci],n,q:"",p:0,f:4,on:true,o:0});rqueue();rkeep()}
 start();
 </script>
 </body>
