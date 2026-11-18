@@ -62,7 +62,7 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
 <div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
-const PAGE_V="2026-11-17-5";
+const PAGE_V="2026-11-18-1";
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
 const ALIMENTS = {
@@ -169,21 +169,50 @@ V.week=()=>{if(!snap){$("#app").innerHTML=noSnap();return}
 function ck(key){return !!kvGet("check:"+key)}
 function toggle(key){kvSet("check:"+key,!ck(key));keep(refresh)}
 V.shop=()=>{if(!snap){$("#app").innerHTML=noSnap();return}
-  const W=snap.weeks.filter(w=>addD(w.mon,6)>=todayS());shopI=Math.min(shopI,W.length-1);const w=W[shopI],due=recDue(w.mon),recW=due.reduce((a,it)=>a+price(it),0),B=snap.budgetW,tot=w.mealsW+recW;
-  const left=w.stores.reduce((a,s)=>a+s.cats.reduce((b,[c,its])=>b+its.filter(i=>!ck(i.key)).length,0),0)+due.filter(it=>!ck(w.mon+"|rec"+it.id)).length;
+  const W=snap.weeks.filter(w=>addD(w.mon,6)>=todayS());shopI=Math.min(shopI,W.length-1);const w=W[shopI],due=recDue(w.mon),recW=due.reduce((a,it)=>a+price(it),0),B=snap.budgetW,tot=w.mealsW-(w.stockV||0)+recW;
+  const left=w.stores.reduce((a,s)=>a+s.cats.reduce((b,[c,its])=>b+its.filter(i=>{if(ck(i.key))return false;const st=w.mon===curMon()&&i.ik?stockP(i.ik):null;return !(st&&(st.v===-1||!i.nv||st.v>=i.nv))}).length,0),0)+due.filter(it=>!ck(w.mon+"|rec"+it.id)).length;
   const rc={};due.forEach(it=>{(rc[it.cat]=rc[it.cat]||[]).push(it)});
   $("#app").innerHTML=`<div class="top"><b>🛒 Courses</b>${stPill()}</div>
    <div class="daynav"><button class="circle" ${shopI===0?"disabled":""} onclick="shopI--;refresh()">‹</button><b>${shopI===0?"Cette semaine":shopI===1?"Semaine prochaine":"Semaine du "+fmtShort(w.mon)}</b><button class="circle" ${shopI>=W.length-1?"disabled":""} onclick="shopI++;refresh()">›</button></div>
-   <div class="card"><div style="display:flex;justify-content:space-between"><span class="muted">Repas</span><b>≈ ${eur(w.mealsW)}</b></div>
+   <div class="card"><div style="display:flex;justify-content:space-between"><span class="muted">Repas${w.stockV>0.05?` (− ${eur(w.stockV)} déjà à la maison)`:""}</span><b>≈ ${eur(w.mealsW-(w.stockV||0))}</b></div>
     <div style="display:flex;justify-content:space-between"><span class="muted">Maison, soins, animaux</span><b>≈ ${eur(recW)}</b></div>
     <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:18px"><span>Total</span><b style="color:${B&&tot>B+0.5?"var(--terra)":"var(--lime)"}">≈ ${eur(tot)}</b></div>
     ${B?`<div class="bar"><div style="width:${Math.min(100,tot/B*100)}%;${tot>B+0.5?"background:var(--terra)":""}"></div></div><div class="muted small" style="margin-top:4px">Budget : ${eur(B)}${tot>B+0.5?" · au-dessus : reporte des achats maison avec ⏭":""}</div>`:""}
     <div class="muted small" style="margin-top:6px">${left} article${left>1?"s":""} restant${left>1?"s":""}</div></div>
-   ${w.stores.map(s=>`<div class="card"><h3>🛒 ${esc(s.st)}</h3>${s.cats.map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(i=>`<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t" style="flex:1">${esc(i.l)}${i.q?` <b style="color:var(--lime)">${esc(i.q)}</b>`:""}${i.pk?`<div class="muted small">${esc(i.pk)}</div>`:""}${i.solo&&!i.q?`<div class="muted small">pour ${esc(snap.me)}</div>`:""}</div>${i.ik&&snap.prices&&snap.prices[i.ik]?`<button class="btn" style="padding:4px 9px;font-size:13px;${realU(i.ik)!=null?"color:var(--lime)":""}" onclick="event.stopPropagation();editPrix('${i.ik}')">€</button>`:""}</div>`).join("")}`).join("")}
-     ${s.ex.length?`<div class="cat">Placard (vérifier)</div>${s.ex.map(i=>`<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t">${esc(i.l)}</div></div>`).join("")}`:""}</div>`).join("")}
+   ${w.stores.map(s=>`<div class="card"><h3>🛒 ${esc(s.st)}</h3>${s.cats.map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(i=>itemRow(i,w.mon)).join("")}`).join("")}
+     ${s.ex.length?`<div class="cat">Placard (vérifier)</div>${s.ex.map(i=>exRow(i,w.mon)).join("")}`:""}</div>`).join("")}
    ${due.length?`<div class="card"><h3>🧺 Maison, soins & animaux</h3>${Object.entries(rc).map(([c,its])=>`<div class="cat">${esc(c)}</div>${its.map(it=>{const k=w.mon+"|rec"+it.id;return `<div style="display:flex;align-items:center;gap:6px"><div class="chk ${ck(k)?"on":""}" style="flex:1" onclick="toggle('${k}')"><div class="box">${ck(k)?"✓":""}</div><div class="t">${esc(it.n)}${it.q?` <b style="color:var(--lime)">${esc(it.q)}</b>`:""} <span class="muted small">≈ ${eur(price(it))}</span></div></div><button class="btn" style="padding:6px 9px" title="Reporter à la semaine prochaine" onclick="skip('${w.mon}','${it.id}')">⏭</button></div>`}).join("")}`).join("")}
     <p class="muted small" style="margin:8px 0 0">⏭ = reporter l'achat à la semaine prochaine</p></div>`:""}`};
 function skip(mon,id){const k="skip:"+mon+"|"+id;kvSet(k,!kvGet(k));toast(kvGet(k)?"Reporté à la semaine prochaine":"Remis cette semaine");keep(refresh)}
+
+
+/* ---------- On en a déjà (placard / frigo) ---------- */
+const curMon=()=>mondayOf(todayS());
+function stockP(k){const v=kvGet("stock:"+k);return v&&v.at&&mondayOf(v.at)===curMon()?v:null}
+function pluralP(u,v){if(v>1&&/\(/.test(u)){const [w,...r]=u.split(" ");return (w.endsWith("s")?w:w+"s")+" "+r.join(" ")}if(v<=1||/^c\. à|^g$|^ml$|\(/.test(u))return u;if(u==="œuf")return "œufs";if(u.endsWith("s")||u.endsWith("x"))return u;return u+"s"}
+function fmtQ(v,u){if(u==="g"){v=v>=500?Math.round(v/50)*50:Math.round(v/10)*10;return v>=1000?(String(Math.round(v/100)/10).replace(".",",")+" kg"):v+" g"}
+  if(u==="ml"){const cl=Math.max(5,Math.round(v/50)*5);return cl>=100?(String(Math.round(cl/10)/10).replace(".",",")+" L"):cl+" cl"}
+  if(/^c\. à/.test(u))return Math.round(v)+" "+u;const n=Math.max(1,Math.ceil(v-0.05));return n+" "+pluralP(u,n)}
+function itemRow(i,mon){const cur=mon===curMon(),s=cur&&i.ik?stockP(i.ik):null;
+  const home=cur&&i.ik?`<button class="btn" style="padding:4px 8px;font-size:13px" onclick="event.stopPropagation();editStock('${i.ik}',${i.nv||0},'${esc(i.nu||"")}')">🏠</button>`:"";
+  const eur=i.ik&&snap.prices&&snap.prices[i.ik]?`<button class="btn" style="padding:4px 9px;font-size:13px;${realU(i.ik)!=null?"color:var(--lime)":""}" onclick="event.stopPropagation();editPrix('${i.ik}')">€</button>`:"";
+  let qtxt=i.q,pk=i.pk,note="";
+  if(s){if(s.v===-1||!i.nv||s.v>=i.nv)return `<div class="chk" style="opacity:.5"><div class="box">🏠</div><div class="t" style="flex:1;text-decoration:none">${esc(i.l)}<div class="muted small">déjà à la maison</div></div>${home}</div>`;
+    const r=i.nv-s.v;qtxt=fmtQ(r,i.nu);pk=i.pks?Math.max(1,Math.ceil(r/i.pks-0.05))+" × "+i.pkl:"";note=`<div class="muted small">on a déjà ${fmtQ(s.v,i.nu)}</div>`}
+  return `<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t" style="flex:1">${esc(i.l)}${qtxt?` <b style="color:var(--lime)">${esc(qtxt)}</b>`:""}${pk?`<div class="muted small">${esc(pk)}</div>`:""}${note}${i.solo&&!i.q?`<div class="muted small">pour ${esc(snap.me)}</div>`:""}</div>${home}${eur}</div>`}
+function exRow(i,mon){const cur=mon===curMon(),xk="x:"+i.l,s=cur?stockP(xk):null;
+  const home=cur?`<button class="btn" style="padding:4px 8px;font-size:13px" onclick="event.stopPropagation();editStock('${esc(xk).replace(/'/g,"")}',0,'')">🏠</button>`:"";
+  if(s)return `<div class="chk" style="opacity:.5"><div class="box">🏠</div><div class="t" style="flex:1;text-decoration:none">${esc(i.l)}<div class="muted small">on en a</div></div>${home}</div>`;
+  return `<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t" style="flex:1">${esc(i.l)}</div>${home}</div>`}
+function editStock(k,nv,nu){const s=stockP(k)||{},isX=k.startsWith("x:"),lab=isX?k.slice(2):(()=>{for(const l of Object.values(ALIMENTS))for(const [kk,ll] of l)if(kk===k)return ll;return k})();
+  $("#sheetRoot").innerHTML=`<div class="sheet" onclick="if(event.target===this)this.remove()"><div>
+   <h2 style="margin:0 0 4px">🏠 ${esc(lab)}</h2><p class="muted small" style="margin:0 0 14px">Qu'est-ce qu'on a déjà à la maison ?${nv&&nu?` Il en faut <b>${fmtQ(nv,nu)}</b> cette semaine.`:""}</p>
+   ${!isX&&nv&&nu?`<label class="muted small">Quantité qu'on a déjà</label><div style="display:flex;gap:8px;align-items:center;margin:4px 0 14px"><input id="stq" class="in" type="number" inputmode="decimal" step="any" value="${s.v>0?s.v:""}" style="flex:1;min-width:0;font-size:18px"><b>${nu==="g"?"g":nu==="ml"?"ml":esc(pluralP(nu,2))}</b></div>
+   <button class="btn" style="width:100%;padding:12px;margin-bottom:8px" onclick="saveStock('${k}',parseFloat(String($('#stq').value).replace(',','.'))||0)">Enregistrer la quantité</button>`:""}
+   <button class="btn pri" style="width:100%;padding:14px;font-size:16px" onclick="saveStock('${k}',-1)">✓ On en a assez</button>
+   <div style="display:flex;gap:8px;margin-top:10px">${stockP(k)?`<button class="btn" style="flex:1" onclick="saveStock('${k}',null)">Effacer</button>`:""}<button class="btn" style="flex:1" onclick="$('#sheetRoot').innerHTML=''">Annuler</button></div>
+   <p class="muted small" style="margin:12px 0 0">Valable pour les courses de cette semaine.</p></div></div>`}
+function saveStock(k,v){kvSet("stock:"+k,v==null||v===0?null:{v,at:todayS()});$("#sheetRoot").innerHTML="";toast(v==null||v===0?"Effacé":"Noté : déjà à la maison 🏠");keep(refresh)}
 
 /* ---------- Maison ---------- */
 V.maison=()=>{const rec=recItems(),avg=rec.filter(i=>i.on).reduce((a,it)=>a+price(it)/it.f,0);
