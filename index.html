@@ -54,6 +54,11 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 .b3 button{width:46px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card2);font-size:19px;cursor:pointer;opacity:.6}
 .b3 button.on{opacity:1}.b3 button.on.l{background:var(--terra);border-color:var(--terra)}.b3 button.on.o{background:var(--lime);border-color:var(--lime)}.b3 button.on.n{background:#4a505c;border-color:#4a505c}
 .bar{height:8px;background:var(--card2);border-radius:8px;overflow:hidden;margin-top:8px}.bar div{height:100%;background:var(--lime)}
+body{-webkit-font-smoothing:antialiased}
+.wrap>*{animation:fu .15s ease-out both}@keyframes fu{from{opacity:0;transform:translateY(3px)}}
+.btn:active,.chk:active,.nav button:active,.card.meal:active{transform:scale(.98)}
+.btn,.chk,.nav button,.card.meal{transition:transform .08s}
+@media (prefers-reduced-motion:reduce){.wrap>*{animation:none}}
 .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#2a2f38;color:var(--ink);padding:11px 18px;border-radius:14px;font-size:14px;border:1px solid #3a404b;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .top{display:flex;align-items:center;gap:10px;margin:0 2px 12px}.top b{flex:1;font-size:15px}
 </style>
@@ -62,7 +67,7 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
 <div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
-const PAGE_V="2026-11-18-4";
+const PAGE_V="2026-11-18-5";
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
 const ALIMENTS = {
@@ -105,7 +110,9 @@ function flush(){if(flushing)return flushing;setStatus("saving");flushing=(async
 async function pull(){
   try{const [rows,sn]=await Promise.all([rpc("kv_all",{p_code:code}),rpc("get_snap",{p_code:code})]);
     (rows||[]).forEach(r=>{if(pend[r.k]===undefined)kv[r.k]={v:r.v,t:new Date(r.updated_at).getTime()}});
-    if(sn&&sn[0])snap=sn[0].data;return true}catch(e){return false}}
+    if(sn&&sn[0])snap=sn[0].data;
+    const sig=(snap?snap.at:0)+"|"+Object.keys(kv).length+"|"+Math.max(0,...Object.values(kv).map(x=>x.t||0));if(sig===lastPullSig)return false;lastPullSig=sig;return true}catch(e){return false}}
+let lastPullSig="";
 function recItems(){return Object.keys(kv).filter(k=>k.startsWith("rec:")&&kv[k].v).map(k=>kv[k].v).sort((a,b)=>(+String(a.id).slice(1)||0)-(+String(b.id).slice(1)||0))}
 function wIdx(mon){return Math.round((new Date(mon+"T12:00:00")-new Date(EPOCH+"T12:00:00"))/(7*864e5))}
 function recDue(mon){const w=wIdx(mon),nx=addD(mon,-7);return recItems().filter(it=>it.on&&((((w%it.f)+it.f)%it.f===((+it.o||0)%it.f)&&!kvGet("skip:"+mon+"|"+it.id))||kvGet("skip:"+nx+"|"+it.id)))}
