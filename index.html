@@ -62,7 +62,7 @@ h2{font-size:22px;margin:4px 4px 12px;letter-spacing:-.3px}h3{margin:0;font-size
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
 <div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
-const PAGE_V="2026-11-18-3";
+const PAGE_V="2026-11-18-4";
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
 const ALIMENTS = {
@@ -174,7 +174,7 @@ V.shop=()=>{if(!snap){$("#app").innerHTML=noSnap();return}
   const left=w.stores.reduce((a,s)=>a+s.cats.reduce((b,[c,its])=>b+its.filter(i=>{if(ck(i.key))return false;const st=w.mon===curMon()&&i.ik?stockP(i.ik):null;return !(st&&(st.v===-1||!i.nv||st.v>=i.nv))}).length,0),0)+due.filter(it=>!ck(w.mon+"|rec"+it.id)).length;
   const rc={};due.forEach(it=>{(rc[it.cat]=rc[it.cat]||[]).push(it)});
   $("#app").innerHTML=`<div class="top"><b>🛒 Courses</b>${stPill()}</div>
-   <div class="daynav"><button class="circle" ${shopI===0?"disabled":""} onclick="shopI--;refresh()">‹</button><b>${shopI===0?"Cette semaine":shopI===1?"Semaine prochaine":"Semaine du "+fmtShort(w.mon)}</b><button class="circle" ${shopI>=W.length-1?"disabled":""} onclick="shopI++;refresh()">›</button></div>
+   <div class="daynav"><button class="circle" ${shopI===0?"disabled":""} onclick="shopI--;refresh()">‹</button><b>${shopI===0?(w.mon===todayS()?"Courses d'aujourd'hui":"Prochaines courses"):"Courses suivantes"}<br><span class="muted small" style="font-weight:400">${fmtDate(w.mon)} · repas jusqu'au ${fmtShort(addD(w.mon,6))}</span></b><button class="circle" ${shopI>=W.length-1?"disabled":""} onclick="shopI++;refresh()">›</button></div>
    <div class="card"><div style="display:flex;justify-content:space-between"><span class="muted">Repas${w.stockV>0.05?` (− ${eur(w.stockV)} déjà à la maison)`:""}</span><b>≈ ${eur(w.mealsW-(w.stockV||0))}</b></div>
     <div style="display:flex;justify-content:space-between"><span class="muted">Maison, soins, animaux</span><b>≈ ${eur(recW)}</b></div>
     <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:18px"><span>Total</span><b style="color:${B&&tot>B+0.5?"var(--terra)":"var(--lime)"}">≈ ${eur(tot)}</b></div>
@@ -188,8 +188,9 @@ function skip(mon,id){const k="skip:"+mon+"|"+id;kvSet(k,!kvGet(k));toast(kvGet(
 
 
 /* ---------- On en a déjà (placard / frigo) ---------- */
-const curMon=()=>mondayOf(todayS());
-function stockP(k){const v=kvGet("stock:"+k);return v&&v.at&&mondayOf(v.at)===curMon()?v:null}
+const nextShopP=d=>{const sd=snap&&snap.shopDay!=null?snap.shopDay:4,dd=new Date(d+"T12:00:00"),w=(dd.getDay()+6)%7;return addD(d,(sd-w+7)%7)};
+const curMon=()=>nextShopP(todayS());
+function stockP(k){const v=kvGet("stock:"+k);return v&&v.at&&nextShopP(v.at)===curMon()?v:null}
 function pluralP(u,v){if(v>1&&/\(/.test(u)){const [w,...r]=u.split(" ");return (w.endsWith("s")?w:w+"s")+" "+r.join(" ")}if(v<=1||/^c\. à|^g$|^ml$|\(/.test(u))return u;if(u==="œuf")return "œufs";if(u.endsWith("s")||u.endsWith("x"))return u;return u+"s"}
 function fmtQ(v,u){if(u==="g"){v=v>=500?Math.round(v/50)*50:Math.round(v/10)*10;return v>=1000?(String(Math.round(v/100)/10).replace(".",",")+" kg"):v+" g"}
   if(u==="ml"){const cl=Math.max(5,Math.round(v/50)*5);return cl>=100?(String(Math.round(cl/10)/10).replace(".",",")+" L"):cl+" cl"}
