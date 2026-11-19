@@ -67,7 +67,7 @@ body{-webkit-font-smoothing:antialiased}
 <div class="wrap" id="app"><div class="card muted">Chargement…</div></div>
 <div id="navRoot"></div><div id="sheetRoot"></div>
 <script>
-const PAGE_V="2026-11-18-5";
+const PAGE_V="2026-11-19-1";
 const API="https://zevdfnzqnibbxdfdjyns.supabase.co/rest/v1/rpc/";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpldmRmbnpxbmliYnhkZmRqeW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5MzA1NjAsImV4cCI6MjExMDUwNjU2MH0.zm_sWPTDR0tAwL0W9PPK_jZzcb1x2IP599u-m0_apPQ";
 const ALIMENTS = {
@@ -207,7 +207,7 @@ function itemRow(i,mon){const cur=mon===curMon(),s=cur&&i.ik?stockP(i.ik):null;
   const eur=i.ik&&snap.prices&&snap.prices[i.ik]?`<button class="btn" style="padding:4px 9px;font-size:13px;${realU(i.ik)!=null?"color:var(--lime)":""}" onclick="event.stopPropagation();editPrix('${i.ik}')">€</button>`:"";
   let qtxt=i.q,pk=i.pk,note="";
   if(s){if(s.v===-1||!i.nv||s.v>=i.nv)return `<div class="chk" style="opacity:.5"><div class="box">🏠</div><div class="t" style="flex:1;text-decoration:none">${esc(i.l)}<div class="muted small">déjà à la maison</div></div>${home}</div>`;
-    const r=i.nv-s.v;qtxt=fmtQ(r,i.nu);pk=i.pks?Math.max(1,Math.ceil(r/i.pks-0.05))+" × "+i.pkl:"";note=`<div class="muted small">on a déjà ${fmtQ(s.v,i.nu)}</div>`}
+    const r=i.nv-s.v;qtxt=fmtQ(r,i.nu);pk=i.pks?Math.max(1,Math.ceil(r/i.pks-0.12))+" × "+i.pkl:"";note=`<div class="muted small">on a déjà ${fmtQ(s.v,i.nu)}</div>`}
   return `<div class="chk ${ck(i.key)?"on":""}" onclick="toggle('${esc(i.key)}')"><div class="box">${ck(i.key)?"✓":""}</div><div class="t" style="flex:1">${esc(i.l)}${qtxt?` <b style="color:var(--lime)">${esc(qtxt)}</b>`:""}${pk?`<div class="muted small">${esc(pk)}</div>`:""}${note}${i.solo&&!i.q?`<div class="muted small">pour ${esc(snap.me)}</div>`:""}</div>${home}${eur}</div>`}
 function exRow(i,mon){const cur=mon===curMon(),xk="x:"+i.l,s=cur?stockP(xk):null;
   const home=cur?`<button class="btn" style="padding:4px 8px;font-size:13px" onclick="event.stopPropagation();editStock('${esc(xk).replace(/'/g,"")}',0,'')">🏠</button>`:"";
